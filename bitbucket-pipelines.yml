@@ -1,0 +1,13 @@
+pipelines:
+  tags:
+    airflow/*:
+      - step:
+          image:
+            name: 164762854291.dkr.ecr.eu-west-1.amazonaws.com/awscli:python3.8-1.19.6
+            aws:
+              access-key: $AWS_ACCESS_KEY_ID
+              secret-key: $AWS_SECRET_ACCESS_KEY
+          name: Copy repository to S3 Bucket of Getir Data Production Airflow
+          script:
+            - aws s3 cp $BITBUCKET_CLONE_DIR s3://getir-airflow-assets/repos/${BITBUCKET_REPO_SLUG}/ --recursive --exclude '.git/*'
+          deployment: prod
